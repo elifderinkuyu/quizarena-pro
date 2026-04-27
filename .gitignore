@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Şifre dosyası GitHub'a gitmesin!###
+application-dev.properties
