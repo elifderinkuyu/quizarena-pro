@@ -34,3 +34,4 @@ build/
 
 ### Şifre dosyası GitHub'a gitmesin!###
 application-dev.properties
+src/main/resources/application-dev.properties
