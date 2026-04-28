@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Giriş Yap</title>
+    
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    
+    <!-- 
+      Sayfanın ana kapsayıcısı.
+      container: Tüm içeriği ortalamak için kullanılır.
+    -->
+    <div class="container">
+        
+        <!-- 
+          Login kartı.
+          Bu kartın içinde form elemanları olacak.
+        -->
+        <div class="login-card">
+            
+            <!-- Logo veya başlık kısmı -->
+            <h1>🎯 QuizArena Pro+</h1>
+            <p class="subtitle">Bilgini test et, rekabete katıl!</p>
+            
+            <!-- 
+              Giriş formu.
+              action: Form gönderildiğinde nereye gideceği (şimdilik boş)
+              id: JavaScript ile bu forma erişmek için kullanacağız.
+            -->
+            <form id="loginForm" novalidate>
+                
+                <!-- Kullanıcı adı alanı -->
+                <div class="input-group">
+                    <label for="username">👤 Kullanıcı Adı</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Kullanıcı adınızı girin" 
+                        required
+                    >
+                </div>
+                
+                <!-- Şifre alanı -->
+                <div class="input-group">
+                    <label for="password">🔒 Şifre</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Şifrenizi girin" 
+                        maxlength="20"
+                        required
+                    >
+                </div>
+                
+                <!-- Giriş yap butonu -->
+                <button type="submit" class="login-btn">GİRİŞ YAP</button>
+                
+                <!-- Kayıt ol linki -->
+                <p class="register-link">
+                    Hesabın yok mu? <a href="register.html">Kayıt Ol</a>
+                </p>
+                
+            </form>
+            
+        </div>
+        
+    </div>
+
+   
+    <script src="js/login.js"></script>
+    
+</body>
+</html>

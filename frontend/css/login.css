@@ -1,0 +1,234 @@
+/* 
+  ========================================
+  LOGIN.CSS - Responsive Login Sayfası
+  Mobil, Tablet, Masaüstü uyumlu
+  ========================================
+*/
+
+/* ========== 1. GENEL SIFIRLAMA VE ORTAK AYARLAR ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px; /* Küçük ekranda kenara yapışmasın */
+}
+
+/* ========== 2. LOGIN KARTI ORTAK STILLERİ ========== */
+.login-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.login-card h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 1s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);  /*Hover etkisi için hafif yukarı hareket*/
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.register-link {
+    margin-top: 20px;
+    color: #777;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* ============================================================
+   3. MEDIA QUERIES - EKRAN BOYUTUNA GÖRE DEĞİŞİKLİKLER
+   ============================================================ */
+
+/* 
+   📱 MOBİL (320px - 480px)
+   Zaten yukarıdaki stiller mobil için uygun.
+   Sadece ekstra küçük telefonlar için düzeltmeler:
+*/
+@media screen and (max-width: 480px) {
+    
+    .login-card {
+        padding: 30px 20px; /* Daha az iç boşluk */
+        border-radius: 15px;
+    }
+    
+    .login-card h1 {
+        font-size: 22px; /* Başlık küçülsün */
+    }
+    
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 25px;
+    }
+    
+    .input-group input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .login-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+}
+
+/* 
+   💻 TABLET (481px - 768px)
+   Biraz daha geniş kart, daha büyük yazılar
+*/
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    
+    .login-card {
+        padding: 35px 30px;
+        max-width: 400px; /* Kart genişliği sınırlı */
+    }
+    
+    .login-card h1 {
+        font-size: 26px;
+    }
+    
+}
+
+/* 
+   🖥️ MASAÜSTÜ (769px ve üstü)
+   Kart biraz daha büyük, bol iç boşluk
+*/
+@media screen and (min-width: 769px) {
+    
+    .login-card {
+        max-width: 500px; /* Masaüstünde daha geniş kart */
+        padding: 50px 40px;
+    }
+    
+    .login-card h1 {
+        font-size: 32px;
+    }
+    
+    .subtitle {
+        font-size: 16px;
+    }
+    
+    .input-group label {
+        font-size: 16px;
+    }
+    
+    .input-group input {
+        padding: 14px 18px;
+        font-size: 16px;
+    }
+    
+    .login-btn {
+        padding: 16px;
+        font-size: 18px;
+    }
+    
+}
+
+
+
+
+/* ========== HATA MESAJLARI ========== */
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Input hatalı olduğunda border kırmızı olsun */
+.input-group input.error {
+    border-color: #e74c3c !important;
+}
+
+/* Buton loading durumu */
+.login-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+}

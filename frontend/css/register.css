@@ -1,0 +1,216 @@
+
+/* 
+  ========================================
+  REGISTER.CSS - Responsive Register Sayfası
+  ========================================
+*/
+
+/* ========== GENEL SIFIRLAMA ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ========== KAYIT KARTI ========== */
+.register-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%;
+}
+
+.register-card h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+/* ========== INPUT GRUPLARI ========== */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block; /* label varsayılan olarak inline , tüm satırı kaplaması için block yapılır*/
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    /* 
+      transition: Bir özellik değiştiğinde ANİ değil YUMUŞAK geçiş yapar.
+      Burada border-color 1 saniyede değişir (1s).
+    */
+    transition: border-color 1s ease;
+}
+
+.input-group input:focus {
+    outline: none; /* tarayıcının otomatik eklediği dış çerçeve */
+    border-color: #667eea;
+}
+
+/* ========== KAYIT BUTONU ========== */
+.register-btn {
+    width: 100%;
+    padding: 14px;
+    /* 
+      Register butonu login'den farklı renkte olabilir.
+      Yeşil tonları "kayıt ol" eylemi için daha uygun.
+    */
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+}
+
+.register-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== LOGIN LINK ========== */
+.login-link {
+    margin-top: 20px;
+    color: #777;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* ========== HATA MESAJLARI ========== */
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.input-group input.error {
+    border-color: #e74c3c !important;
+}
+
+/* ========== BUTON LOADING ========== */
+.register-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed; /*bu butona şu an tıklayamazsın*/
+    pointer-events: none; /*Hiçbir fare olayı çalışmaz! Tıklama, hover, hepsi ölür.*/
+}
+
+/* ============================================================
+   RESPONSIVE - MEDIA QUERIES
+   ============================================================ */
+
+/* 📱 Mobil */
+@media screen and (max-width: 480px) {
+    .register-card {
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+    .register-card h1 {
+        font-size: 22px;
+    }
+    .subtitle {
+        font-size: 12px;
+        margin-bottom: 25px;
+    }
+    .input-group input {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    .register-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+/* 💻 Tablet */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .register-card {
+        max-width: 400px;
+        padding: 35px 30px;
+    }
+    .register-card h1 {
+        font-size: 26px;
+    }
+}
+
+/* 🖥️ Masaüstü */
+@media screen and (min-width: 769px) {
+    .register-card {
+        max-width: 500px;
+        padding: 50px 40px;
+    }
+    .register-card h1 {
+        font-size: 32px;
+    }
+    .subtitle {
+        font-size: 16px;
+    }
+    .input-group label {
+        font-size: 16px;
+    }
+    .input-group input {
+        padding: 14px 18px;
+        font-size: 16px;
+    }
+    .register-btn {
+        padding: 16px;
+        font-size: 18px;
+    }
+}
