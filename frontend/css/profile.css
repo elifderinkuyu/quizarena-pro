@@ -1,0 +1,168 @@
+/* ========== GENEL AYARLAR ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ========== ANA KART ========== */
+.profile-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== GERİ BUTONU ========== */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #ccc;
+}
+
+/* ========== HEADER ========== */
+.profile-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.profile-header h1 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-header p {
+    color: #777;
+}
+
+/* ========== USER BOX ========== */
+.user-box {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.user-box h2 {
+    color: #333;
+}
+
+.user-box p {
+    color: #777;
+}
+
+/* ========== STAT GRID ========== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #f4f4ff;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat-card span {
+    display: block;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.stat-card strong {
+    font-size: 20px;
+    color: #333;
+}
+
+/* ========== BADGES ========== */
+.badges-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.badge-card {
+    background: #eee;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.badge-card.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    opacity: 1;
+}
+
+.badge-card span {
+    font-size: 24px;
+}
+
+.badge-card p {
+    font-size: 12px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media screen and (max-width: 768px) {
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .badges-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

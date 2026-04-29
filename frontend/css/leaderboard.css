@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.leaderboard-card {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    background: #ddd;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background: #ccc;
+}
+
+.leaderboard-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.leaderboard-header h1 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.leaderboard-header p {
+    color: #777;
+}
+
+.top-player {
+    text-align: center;
+    background: #f4f4ff;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.crown {
+    font-size: 45px;
+}
+
+.top-player h2 {
+    color: #333;
+    margin-top: 5px;
+}
+
+.top-player p {
+    color: #777;
+}
+
+.leaderboard-table {
+    background: #f9f9f9;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.table-head,
+.table-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
+    align-items: center;
+    gap: 10px;
+}
+
+.table-head {
+    font-weight: bold;
+    color: #555;
+    padding: 12px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.table-row {
+    background: white;
+    margin-top: 10px;
+    padding: 14px 12px;
+    border-radius: 12px;
+    color: #333;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-row:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.rank {
+    font-weight: bold;
+}
+
+.score {
+    font-weight: bold;
+    color: #667eea;
+}
+
+@media screen and (max-width: 600px) {
+    .leaderboard-card {
+        padding: 30px 20px;
+    }
+
+    .back-btn {
+        position: static;
+        margin-bottom: 15px;
+    }
+
+    .table-head,
+    .table-row {
+        grid-template-columns: 0.8fr 1.6fr 1fr 1fr;
+        font-size: 13px;
+    }
+}

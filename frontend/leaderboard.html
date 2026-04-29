@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Sıralama</title>
+
+    <link rel="stylesheet" href="css/leaderboard.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="leaderboard-card">
+
+            <button type="button" class="back-btn" id="backBtn">
+                ← Ana Sayfa
+            </button>
+
+            <div class="leaderboard-header">
+                <h1>🏅 Sıralama</h1>
+                <p>En yüksek puana sahip oyuncuları buradan görebilirsin.</p>
+            </div>
+
+            <div class="top-player">
+                <div class="crown">👑</div>
+                <h2 id="topUsername">Yükleniyor...</h2>
+                <p>Haftanın lider oyuncusu</p>
+            </div>
+
+            <div class="leaderboard-table">
+
+                <div class="table-head">
+                    <span>Sıra</span>
+                    <span>Kullanıcı</span>
+                    <span>Seviye</span>
+                    <span>Puan</span>
+                </div>
+
+                <div id="leaderboardList">
+                    <!-- Kullanıcılar JavaScript ile gelecek -->
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/leaderboard.js"></script>
+
+</body>
+</html>

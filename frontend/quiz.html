@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Quiz</title>
+
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="quiz-card">
+
+            <div class="quiz-header">
+                <button type="button" class="back-btn" id="backBtn">
+                    ← Ana Sayfa
+                </button>
+
+                <h1>🎯 QuizArena Pro+</h1>
+
+                <div class="score-box">
+                    Puan: <span id="score">0</span>
+                </div>
+            </div>
+
+            <div class="quiz-info">
+                <p>Kategori: <strong id="categoryName">Yükleniyor...</strong></p>
+                <p>Süre: <strong id="timer">15</strong> saniye</p>
+            </div>
+
+            <div class="progress-area">
+                <div class="progress-text">
+                    Soru <span id="currentQuestion">1</span> / <span id="totalQuestion">0</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="question-area">
+                <h2 id="questionText">Soru yükleniyor...</h2>
+            </div>
+
+            <div class="answers-area" id="answersArea">
+                <!-- Cevaplar JavaScript ile gelecek -->
+            </div>
+
+            <div class="quiz-actions">
+                <button type="button" class="next-btn" id="nextBtn" disabled>
+                    Sonraki Soru
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/quiz.js"></script>
+
+</body>
+</html>

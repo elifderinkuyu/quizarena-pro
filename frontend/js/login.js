@@ -71,9 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Backend'in cevabına göre işlem yap
                 if (data === 'Giriş başarılı') {
-                    // Başarılı → Ana sayfaya yönlendir
-                    window.location.href = 'home.html';
-                } else if (data === 'Hatalı kullanıcı adı veya şifre!') {
+                // Giriş yapan kullanıcı adını tarayıcıda sakla
+                  localStorage.setItem('username', username);
+
+                // Başarılı → Ana sayfaya yönlendir
+                   window.location.href = 'home.html';
+                }else if (data === 'Hatalı kullanıcı adı veya şifre!') {
                     // Şifre yanlış
                     showError(passwordInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
                     showError(usernameInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
