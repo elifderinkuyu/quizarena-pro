@@ -1,110 +1,92 @@
 // Login sayfası JavaScript işlemleri
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Elementleri yakala
+document.addEventListener('DOMContentLoaded', function () {
+
     const loginForm = document.getElementById('loginForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
-    
-    // Form gönderilince...
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // ⚠️ EN BAŞTA sayfa yenilenmesini engelle!
-        
-        // ========== 1. ÖNCEKİ HATALARI TEMİZLE ==========
-        usernameInput.classList.remove('error');
-        passwordInput.classList.remove('error');
-        
-        const oldErrors = document.querySelectorAll('.error-message');
-        oldErrors.forEach(error => {
-            error.remove();
-        });
-        
-        // ========== 2. DEĞERLERİ AL ==========
+    const loginBtn = document.querySelector('.login-btn');
+
+    loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        clearErrors();
+
         const username = usernameInput.value.trim();
         const password = passwordInput.value.trim();
-        
-        // ========== 3. KONTROLLER ==========
+
         let hasError = false;
-        
+
         if (username === '') {
             showError(usernameInput, '⚠️ Kullanıcı adı boş bırakılamaz!');
             hasError = true;
         }
-        
+
         if (password === '') {
             showError(passwordInput, '⚠️ Şifre boş bırakılamaz!');
             hasError = true;
         }
-        
+
         if (password !== '' && password.length < 4) {
             showError(passwordInput, '⚠️ Şifre en az 4 karakter olmalı!');
             hasError = true;
         }
-        
-        // ========== 4. HATA YOKSA BACKEND'E İSTEK AT ==========
-        if (!hasError) {
-            const loginBtn = document.querySelector('.login-btn');
-            
-            // Loading durumuna geç
-            loginBtn.classList.add('loading');
-            loginBtn.textContent = '⏳ Giriş yapılıyor...';
-            
-            // 🔥 Backend'e POST isteği at
-            fetch('http://localhost:8080/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
+
+        if (hasError) return;
+
+        loginBtn.classList.add('loading');
+        loginBtn.textContent = '⏳ Giriş yapılıyor...';
+
+        fetch('http://localhost:8080/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
             })
-            .then(function(response) {
-                // Backend'den gelen cevabı text olarak al
+        })
+            .then(function (response) {
                 return response.text();
             })
-            .then(function(data) {
-                // Loading'i kaldır
+            .then(function (data) {
                 loginBtn.classList.remove('loading');
                 loginBtn.textContent = 'GİRİŞ YAP';
-                
-                // Backend'in cevabına göre işlem yap
-                if (data === 'Giriş başarılı') {
-                // Giriş yapan kullanıcı adını tarayıcıda sakla
-                  localStorage.setItem('username', username);
 
-                // Başarılı → Ana sayfaya yönlendir
-                   window.location.href = 'home.html';
-                }else if (data === 'Hatalı kullanıcı adı veya şifre!') {
-                    // Şifre yanlış
-                    showError(passwordInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
-                    showError(usernameInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
+                if (data === 'Giriş başarılı') {
+                    localStorage.setItem('username', username);
+                    window.location.href = 'home.html';
                 } else {
-                    // Beklenmeyen cevap
-                    alert('Bir hata oluştu: ' + data);
+                    showError(usernameInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
+                    showError(passwordInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
                 }
             })
-            .catch(function(error) {
-                // Bağlantı hatası (backend çalışmıyor olabilir)
+            .catch(function (error) {
                 loginBtn.classList.remove('loading');
                 loginBtn.textContent = 'GİRİŞ YAP';
+
                 alert('⚠️ Sunucuya bağlanılamadı! Backend çalışıyor mu?');
                 console.error('Hata:', error);
             });
-        }
-        
     });
-    
-    // ========== YARDIMCI FONKSİYON: Hata Gösterme ==========
+
+    function clearErrors() {
+        usernameInput.classList.remove('error');
+        passwordInput.classList.remove('error');
+
+        const oldErrors = document.querySelectorAll('.error-message');
+        oldErrors.forEach(function (error) {
+            error.remove();
+        });
+    }
+
     function showError(inputElement, message) {
         inputElement.classList.add('error');
-        
+
         const errorDiv = document.createElement('div');
         errorDiv.classList.add('error-message');
         errorDiv.textContent = message;
-        
+
         inputElement.parentElement.appendChild(errorDiv);
     }
-    
 });

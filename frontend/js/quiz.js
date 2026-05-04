@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const progressFill = document.getElementById('progressFill');
     const backBtn = document.getElementById('backBtn');
 
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        window.location.href = 'index.html';
+        return;
+    }
+
     let selectedCategory = localStorage.getItem('selectedCategory');
 
     if (!selectedCategory) {
@@ -74,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         questionText.textContent = q.question;
         currentQuestionText.textContent = currentQuestionIndex + 1;
 
-        const progressPercent = ((currentQuestionIndex) / questions.length) * 100;
+        const progressPercent = (currentQuestionIndex / questions.length) * 100;
         progressFill.style.width = progressPercent + "%";
 
         q.answers.forEach(function (answer, index) {
@@ -133,8 +140,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function saveScoreToDatabase() {
+        fetch('http://localhost:8080/api/score', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                category: selectedCategory,
+                score: score
+            })
+        })
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (data) {
+            console.log("Skor gönderildi:", data);
+        })
+        .catch(function (error) {
+            console.error("Skor gönderilemedi:", error);
+        });
+    }
+
     function showResultScreen() {
         clearInterval(timer);
+
+        saveScoreToDatabase();
 
         progressFill.style.width = "100%";
         questionText.textContent = "Quiz Tamamlandı 🎉";
@@ -171,7 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         answersArea.appendChild(resultBox);
-
         nextBtn.style.display = "none";
 
         document.getElementById("restartBtn").addEventListener("click", function () {

@@ -1,29 +1,36 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('username');
 
-    const categoryButtons = document.querySelectorAll('.start-btn');
+    if (!username) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', function () {
+    document.getElementById('profileUsername').textContent = username;
 
-            const card = button.closest('.category-card');
+    const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.addEventListener('click', function () {
+        localStorage.removeItem('username');
+        window.location.href = 'index.html';
+    });
+
+    const profileBtn = document.getElementById('profileBtn');
+    profileBtn.addEventListener('click', function () {
+        window.location.href = 'profile.html';
+    });
+
+    const leaderboardBtn = document.getElementById('leaderboardBtn');
+    leaderboardBtn.addEventListener('click', function () {
+        window.location.href = 'leaderboard.html';
+    });
+
+    const categoryCards = document.querySelectorAll('.category-card');
+
+    categoryCards.forEach(function (card) {
+        card.addEventListener('click', function () {
             const category = card.getAttribute('data-category');
-
-            // seçilen kategoriyi kaydet
             localStorage.setItem('selectedCategory', category);
-
-            // quiz sayfasına git
             window.location.href = 'quiz.html';
         });
     });
-    const profileBtn = document.getElementById('profileBtn');
-    const leaderboardBtn = document.getElementById('leaderboardBtn');
-
-    profileBtn.addEventListener('click', function () {
-       window.location.href = 'profile.html';
-});
-
-    leaderboardBtn.addEventListener('click', function () {
-       window.location.href = 'leaderboard.html';
-});
-
 });
