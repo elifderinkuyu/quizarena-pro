@@ -1,30 +1,32 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     const backBtn = document.getElementById('backBtn');
+    const username = localStorage.getItem('username');
 
-    // Şimdilik sabit veriler (backend gelince burası değişecek)
-    const userData = {
-        username: "Semanur",
-        level: 1,
-        totalScore: 120,
-        quizCount: 5,
-        correctCount: 12,
-        wrongCount: 3,
-        bestCategory: "Yazılım"
-    };
+    if (!username) {
+        window.location.href = 'index.html';
+        return;
+    }
 
-    // HTML'e yazdır
-    document.getElementById('username').textContent = userData.username;
-    document.getElementById('level').textContent = userData.level;
-    document.getElementById('totalScore').textContent = userData.totalScore;
-    document.getElementById('quizCount').textContent = userData.quizCount;
-    document.getElementById('correctCount').textContent = userData.correctCount;
-    document.getElementById('wrongCount').textContent = userData.wrongCount;
-    document.getElementById('bestCategory').textContent = userData.bestCategory;
+    document.getElementById('username').textContent = username;
 
-    // Geri butonu
+    fetch(`http://localhost:8080/api/profile/${username}`)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            document.getElementById('level').textContent = data.level;
+            document.getElementById('totalScore').textContent = data.totalScore;
+            document.getElementById('quizCount').textContent = data.quizCount;
+            document.getElementById('bestCategory').textContent = data.bestCategory;
+
+            document.getElementById('correctCount').textContent = data.correctCount;
+            document.getElementById('wrongCount').textContent = data.wrongCount;
+        })
+        .catch(function (error) {
+            console.error("Profil verisi alınamadı:", error);
+        });
+
     backBtn.addEventListener('click', function () {
         window.location.href = "home.html";
     });
-
 });

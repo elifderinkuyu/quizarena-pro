@@ -19,31 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     let selectedCategory = localStorage.getItem('selectedCategory');
+    let selectedLevel = localStorage.getItem('selectedLevel');
 
-    if (!selectedCategory) {
-        selectedCategory = "Yazılım";
-    }
+    if (!selectedCategory) selectedCategory = "Yazılım";
+    if (!selectedLevel) selectedLevel = "Kolay";
 
-    categoryName.textContent = selectedCategory;
+    categoryName.textContent = selectedCategory + " (" + selectedLevel + ")";
 
-    const questions = [
-        {
-            question: "HTML ne için kullanılır?",
-            answers: ["Veritabanı", "Web sayfası", "Sunucu", "Donanım"],
-            correct: 1
-        },
-        {
-            question: "CSS ne işe yarar?",
-            answers: ["Programlama dili", "Tasarım", "Veritabanı", "Sunucu"],
-            correct: 1
-        },
-        {
-            question: "JavaScript ne yapar?",
-            answers: ["Tasarım", "Sayfayı hareketlendirir", "Veritabanı", "Donanım"],
-            correct: 1
-        }
-    ];
-
+    let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let correctCount = 0;
@@ -51,7 +34,42 @@ document.addEventListener('DOMContentLoaded', function () {
     let timeLeft = 15;
     let timer;
 
-    totalQuestionText.textContent = questions.length;
+    nextBtn.disabled = true;
+    questionText.textContent = "Sorular yükleniyor...";
+
+    function loadQuestionsFromDatabase() {
+        fetch(`http://localhost:8080/api/questions?category=${encodeURIComponent(selectedCategory)}&level=${encodeURIComponent(selectedLevel)}`)
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("Sorular getirilemedi");
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                questions = data.map(function (q) {
+                    return {
+                        question: q.questionText,
+                        answers: [q.optionA, q.optionB, q.optionC, q.optionD],
+                        correct: q.correctOption
+                    };
+                });
+
+                if (questions.length === 0) {
+                    questionText.textContent = "Bu kategori ve seviyeye ait soru bulunamadı.";
+                    answersArea.innerHTML = "";
+                    totalQuestionText.textContent = "0";
+                    currentQuestionText.textContent = "0";
+                    return;
+                }
+
+                totalQuestionText.textContent = questions.length;
+                loadQuestion();
+            })
+            .catch(function (error) {
+                console.error("Soru çekme hatası:", error);
+                questionText.textContent = "Sorular yüklenirken hata oluştu.";
+            });
+    }
 
     function startTimer() {
         clearInterval(timer);
@@ -105,9 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const q = questions[currentQuestionIndex];
         const buttons = document.querySelectorAll('.answer-btn');
 
-        buttons.forEach(function (btn) {
-            btn.disabled = true;
-        });
+        buttons.forEach(btn => btn.disabled = true);
 
         if (index === q.correct) {
             button.classList.add("correct");
@@ -115,7 +131,11 @@ document.addEventListener('DOMContentLoaded', function () {
             correctCount++;
         } else {
             button.classList.add("wrong");
-            buttons[q.correct].classList.add("correct");
+
+            if (buttons[q.correct]) {
+                buttons[q.correct].classList.add("correct");
+            }
+
             wrongCount++;
         }
 
@@ -134,10 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function disableAnswers() {
         const buttons = document.querySelectorAll('.answer-btn');
-
-        buttons.forEach(function (btn) {
-            btn.disabled = true;
-        });
+        buttons.forEach(btn => btn.disabled = true);
     }
 
     function saveScoreToDatabase() {
@@ -149,17 +166,23 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({
                 username: username,
                 category: selectedCategory,
-                score: score
+                level: selectedLevel,
+                score: score,
+                correctCount: correctCount,
+                wrongCount: wrongCount
             })
         })
         .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Skor kaydedilemedi");
+            }
             return response.text();
         })
         .then(function (data) {
-            console.log("Skor gönderildi:", data);
+            console.log("Skor başarıyla kaydedildi:", data);
         })
         .catch(function (error) {
-            console.error("Skor gönderilemedi:", error);
+            console.error("Skor kaydetme hatası:", error);
         });
     }
 
@@ -176,42 +199,16 @@ document.addEventListener('DOMContentLoaded', function () {
         resultBox.classList.add("result-box");
 
         resultBox.innerHTML = `
-            <h2>Sonuç Ekranı</h2>
-            <p class="result-category">Kategori: <strong>${selectedCategory}</strong></p>
-
-            <div class="result-stats">
-                <div class="result-item">
-                    <span>🏆 Toplam Puan</span>
-                    <strong>${score}</strong>
-                </div>
-
-                <div class="result-item">
-                    <span>✅ Doğru</span>
-                    <strong>${correctCount}</strong>
-                </div>
-
-                <div class="result-item">
-                    <span>❌ Yanlış</span>
-                    <strong>${wrongCount}</strong>
-                </div>
-            </div>
-
-            <div class="result-actions">
-                <button type="button" id="restartBtn" class="result-btn">🔁 Tekrar Oyna</button>
-                <button type="button" id="homeBtn" class="result-btn secondary">🏠 Ana Sayfaya Dön</button>
-            </div>
+            <h2>Sonuç</h2>
+            <p>Kategori: ${selectedCategory}</p>
+            <p>Seviye: ${selectedLevel}</p>
+            <p>Doğru Sayısı: ${correctCount}</p>
+            <p>Yanlış Sayısı: ${wrongCount}</p>
+            <p>Puan: ${score}</p>
         `;
 
         answersArea.appendChild(resultBox);
         nextBtn.style.display = "none";
-
-        document.getElementById("restartBtn").addEventListener("click", function () {
-            window.location.reload();
-        });
-
-        document.getElementById("homeBtn").addEventListener("click", function () {
-            window.location.href = "home.html";
-        });
     }
 
     nextBtn.addEventListener("click", function () {
@@ -228,6 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = "home.html";
     });
 
-    loadQuestion();
+    loadQuestionsFromDatabase();
 
 });
