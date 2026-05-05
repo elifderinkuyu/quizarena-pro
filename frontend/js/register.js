@@ -6,11 +6,29 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
+    // ========== ELEMENTLERİ YAKALA ==========
     const registerForm = document.getElementById('registerForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const toggleConfirmBtn = document.getElementById('toggleConfirm');
     
+    // ========== ŞİFRE GÖSTER/SAKLA ==========
+    togglePasswordBtn.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🔓';
+    });
+
+    // ========== ŞİFRE TEKRAR GÖSTER/SAKLA ==========
+    toggleConfirmBtn.addEventListener('click', function () {
+        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordInput.setAttribute('type', type);
+        toggleConfirmBtn.textContent = type === 'password' ? '👁️' : '🔓';
+    });
+    
+    // ========== FORM GÖNDERİLİNCE ==========
     registerForm.addEventListener('submit', function(e) {
         e.preventDefault();
         clearAllErrors();
@@ -45,13 +63,12 @@ document.addEventListener('DOMContentLoaded', function() {
             hasError = true;
         }
         
-        // ========== 5. HATA YOKSA BACKEND'E KAYIT İSTEĞİ AT ==========
+        // ========== BACKEND'E KAYIT İSTEĞİ AT ==========
         if (!hasError) {
             const registerBtn = document.querySelector('.register-btn');
             registerBtn.classList.add('loading');
             registerBtn.textContent = '⏳ Kayıt yapılıyor...';
             
-            // 🔥 Backend'e POST isteği at (SADECE username ve password gönder)
             fetch('http://localhost:8080/api/register', {
                 method: 'POST',
                 headers: {
@@ -88,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
     });
     
+    // ========== YARDIMCI FONKSİYONLAR ==========
     function clearAllErrors() {
         usernameInput.classList.remove('error');
         passwordInput.classList.remove('error');

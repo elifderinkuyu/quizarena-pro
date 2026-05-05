@@ -1,11 +1,21 @@
 // Login sayfası JavaScript işlemleri
 document.addEventListener('DOMContentLoaded', function () {
 
+    // ========== ELEMENTLERİ YAKALA ==========
     const loginForm = document.getElementById('loginForm');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const loginBtn = document.querySelector('.login-btn');
+    const togglePasswordBtn = document.getElementById('togglePassword');
 
+    // ========== ŞİFRE GÖSTER/SAKLA ==========
+    togglePasswordBtn.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🔓';
+    });
+
+    // ========== FORM GÖNDERİLİNCE ==========
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
@@ -33,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (hasError) return;
 
+        // ========== BACKEND'E İSTEK AT ==========
         loginBtn.classList.add('loading');
         loginBtn.textContent = '⏳ Giriş yapılıyor...';
 
@@ -64,12 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(function (error) {
                 loginBtn.classList.remove('loading');
                 loginBtn.textContent = 'GİRİŞ YAP';
-
                 alert('⚠️ Sunucuya bağlanılamadı! Backend çalışıyor mu?');
                 console.error('Hata:', error);
             });
     });
 
+    // ========== YARDIMCI FONKSİYONLAR ==========
     function clearErrors() {
         usernameInput.classList.remove('error');
         passwordInput.classList.remove('error');

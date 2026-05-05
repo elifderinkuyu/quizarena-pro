@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -6,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuizArena Pro+ - Kayıt Ol</title>
     
-   
     <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
@@ -18,10 +16,6 @@
             <h1>🎯 QuizArena Pro+</h1>
             <p class="subtitle">Hemen kayıt ol, rekabete başla!</p>
             
-            <!-- 
-              novalidate: Tarayıcının kendi hata mesajlarını kapatır.
-              Biz kendi mesajlarımızı göstereceğiz.
-            -->
             <form id="registerForm" novalidate>
                 
                 <!-- Kullanıcı adı -->
@@ -35,41 +29,43 @@
                     >
                 </div>
                 
-                <!-- Şifre -->
+                <!-- Şifre (Göster/Sakla butonlu) -->
                 <div class="input-group">
                     <label for="password">🔒 Şifre</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        placeholder="En az 4 karakter" 
-                        maxlength="20"
-                        required
-                    >
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="En az 4 karakter" 
+                            maxlength="20"
+                            required
+                        >
+                        <button type="button" id="togglePassword" class="toggle-password">
+                            👁️
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- 
-                  Şifre Tekrar - REGISTER'IN LOGIN'DEN FARKI BURASI!
-                  Kullanıcı şifresini yanlış yazmış olabilir, 
-                  iki kere yazdırarak kontrol ederiz.
-                -->
+                <!-- Şifre Tekrar (Göster/Sakla butonlu) -->
                 <div class="input-group">
                     <label for="confirmPassword">🔒 Şifre Tekrar</label>
-                    <input 
-                        type="password" 
-                        id="confirmPassword" 
-                        placeholder="Şifrenizi tekrar girin" 
-                        maxlength="20"
-                        required
-                    >
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            placeholder="Şifrenizi tekrar girin" 
+                            maxlength="20"
+                            required
+                        >
+                        <button type="button" id="toggleConfirm" class="toggle-password">
+                            👁️
+                        </button>
+                    </div>
                 </div>
                 
                 <!-- Kayıt ol butonu -->
                 <button type="submit" class="register-btn">KAYIT OL</button>
                 
-                <!-- 
-                  Login sayfasına yönlendiren link.
-                  "Zaten hesabın var mı?" sorusuyla login'e geçiş.
-                -->
                 <p class="login-link">
                     Zaten hesabın var mı? <a href="index.html">Giriş Yap</a>
                 </p>

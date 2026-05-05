@@ -1,3 +1,4 @@
+
 /* 
   ========================================
   LOGIN.CSS - Responsive Login Sayfası
@@ -23,7 +24,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 20px; /* Küçük ekranda kenara yapışmasın */
+    padding: 20px;
 }
 
 /* ========== 2. LOGIN KARTI ORTAK STILLERİ ========== */
@@ -74,6 +75,36 @@ body {
     border-color: #667eea;
 }
 
+/* ========== ŞİFRE GÖSTER/SAKLA ========== */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    line-height: 1;
+    color: #888;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: #333;
+}
+
 .login-btn {
     width: 100%;
     padding: 14px;
@@ -89,7 +120,7 @@ body {
 }
 
 .login-btn:hover {
-    transform: translateY(-2px);  /*Hover etkisi için hafif yukarı hareket*/
+    transform: translateY(-2px);
     box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
 }
 
@@ -113,98 +144,68 @@ body {
     text-decoration: underline;
 }
 
-
 /* ============================================================
    3. MEDIA QUERIES - EKRAN BOYUTUNA GÖRE DEĞİŞİKLİKLER
    ============================================================ */
 
-/* 
-   📱 MOBİL (320px - 480px)
-   Zaten yukarıdaki stiller mobil için uygun.
-   Sadece ekstra küçük telefonlar için düzeltmeler:
-*/
+/* 📱 MOBİL */
 @media screen and (max-width: 480px) {
-    
     .login-card {
-        padding: 30px 20px; /* Daha az iç boşluk */
+        padding: 30px 20px;
         border-radius: 15px;
     }
-    
     .login-card h1 {
-        font-size: 22px; /* Başlık küçülsün */
+        font-size: 22px;
     }
-    
     .subtitle {
         font-size: 12px;
         margin-bottom: 25px;
     }
-    
     .input-group input {
         padding: 10px 12px;
         font-size: 14px;
     }
-    
     .login-btn {
         padding: 12px;
         font-size: 14px;
     }
-    
 }
 
-/* 
-   💻 TABLET (481px - 768px)
-   Biraz daha geniş kart, daha büyük yazılar
-*/
+/* 💻 TABLET */
 @media screen and (min-width: 481px) and (max-width: 768px) {
-    
     .login-card {
         padding: 35px 30px;
-        max-width: 400px; /* Kart genişliği sınırlı */
+        max-width: 400px;
     }
-    
     .login-card h1 {
         font-size: 26px;
     }
-    
 }
 
-/* 
-   🖥️ MASAÜSTÜ (769px ve üstü)
-   Kart biraz daha büyük, bol iç boşluk
-*/
+/* 🖥️ MASAÜSTÜ */
 @media screen and (min-width: 769px) {
-    
     .login-card {
-        max-width: 500px; /* Masaüstünde daha geniş kart */
+        max-width: 500px;
         padding: 50px 40px;
     }
-    
     .login-card h1 {
         font-size: 32px;
     }
-    
     .subtitle {
         font-size: 16px;
     }
-    
     .input-group label {
         font-size: 16px;
     }
-    
     .input-group input {
         padding: 14px 18px;
         font-size: 16px;
     }
-    
     .login-btn {
         padding: 16px;
         font-size: 18px;
     }
-    
 }
-
-
-
 
 /* ========== HATA MESAJLARI ========== */
 .error-message {
