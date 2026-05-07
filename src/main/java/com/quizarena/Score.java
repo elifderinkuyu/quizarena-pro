@@ -12,11 +12,15 @@ public class Score {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private String username;
     private String category;
 
     @Column(name = "level")
-    private String level; // 🔥 EKLEDİK
+    private String level;
 
     private int score;
 
@@ -43,6 +47,14 @@ public class Score {
         return id;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -59,11 +71,11 @@ public class Score {
         this.category = category;
     }
 
-    public String getLevel() { // 🔥 EKLEDİK
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(String level) { // 🔥 EKLEDİK
+    public void setLevel(String level) {
         this.level = level;
     }
 

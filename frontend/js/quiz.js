@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const categoryName = document.getElementById('categoryName');
@@ -33,6 +34,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let wrongCount = 0;
     let timeLeft = 15;
     let timer;
+    let scoreSaved = false; // 🆕 Skor kaydedildi mi?
+
+    // 🆕 Seviyeye göre puan
+    function getPointByLevel() {
+        if (selectedLevel === 'Kolay') return 10;
+        if (selectedLevel === 'Orta') return 25;
+        if (selectedLevel === 'Zor') return 50;
+        return 10;
+    }
 
     nextBtn.disabled = true;
     questionText.textContent = "Sorular yükleniyor...";
@@ -127,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (index === q.correct) {
             button.classList.add("correct");
-            score += 10;
+            score += getPointByLevel(); // 🆕 Seviyeye göre puan
             correctCount++;
         } else {
             button.classList.add("wrong");
@@ -158,6 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function saveScoreToDatabase() {
+        if (scoreSaved) return; // 🆕 Zaten kaydedildiyse tekrar etme
+        scoreSaved = true;
+
         fetch('http://localhost:8080/api/score', {
             method: 'POST',
             headers: {
@@ -183,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(function (error) {
             console.error("Skor kaydetme hatası:", error);
+            scoreSaved = false; // Hata olursa tekrar denenebilsin
         });
     }
 
@@ -222,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     backBtn.addEventListener("click", function () {
+        saveScoreToDatabase(); // 🆕 Çıkarken skoru kaydet
         window.location.href = "home.html";
     });
 

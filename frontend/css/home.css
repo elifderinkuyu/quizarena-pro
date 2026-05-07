@@ -1,3 +1,4 @@
+
 /* ========================================
    HOME.CSS - Ana Sayfa
    ======================================== */
@@ -72,16 +73,16 @@ body {
 .profile-info-box {
     margin: 30px auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px; /* kategori ile aynı boşluk */
-    max-width: 100%; /* TAM GENİŞLİK */
+    grid-template-columns: repeat(4, 1fr); /* 4 sütun: Kullanıcı, Puan, Quiz, Sıralama */
+    gap: 15px;
+    max-width: 100%;
 }
 
 .profile-item {
-    height: 70px; /* küçültüldü */
+    height: 70px;
     background: #f4f4ff;
     border-radius: 15px;
-    padding: 10px; /* küçült */
+    padding: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -127,12 +128,12 @@ body {
 .category-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px; /* boşluk azaltıldı */
+    gap: 15px;
 }
 
 .category-card {
     background: #f9f9f9;
-    padding: 14px; /* 18 → 14 */
+    padding: 14px;
     border-radius: 15px;
     text-align: center;
     cursor: pointer;
@@ -216,7 +217,7 @@ body {
 /* ========== TABLET ========== */
 @media screen and (max-width: 768px) {
     .profile-info-box {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Mobilde 2'li */
     }
 
     .category-grid {
@@ -241,7 +242,7 @@ body {
     }
 
     .profile-info-box {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Çok küçükte tek sütun */
     }
 
     .quick-actions {

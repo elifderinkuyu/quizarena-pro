@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -84,12 +85,14 @@ body {
     padding: 15px;
 }
 
+/* 3 sütun eşit aralıklı */
 .table-head,
 .table-row {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
     align-items: center;
     gap: 10px;
+    text-align: center;
 }
 
 .table-head {
@@ -134,7 +137,7 @@ body {
 
     .table-head,
     .table-row {
-        grid-template-columns: 0.8fr 1.6fr 1fr 1fr;
+        grid-template-columns: 1fr 3fr 1fr;
         font-size: 13px;
     }
 }
