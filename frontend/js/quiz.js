@@ -1,3 +1,5 @@
+let stompClient = null;
+let currentUser = null;
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -13,10 +15,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const backBtn = document.getElementById('backBtn');
 
     const username = localStorage.getItem('username');
+    currentUser = username;
 
     if (!username) {
         window.location.href = 'index.html';
         return;
+    }
+
+    // WebSocket bağlantısını kur (online durum için)
+    if (!stompClient || !stompClient.connected) {
+        connectWebSocket(username);
     }
 
     let selectedCategory = localStorage.getItem('selectedCategory');
@@ -34,9 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let wrongCount = 0;
     let timeLeft = 15;
     let timer;
-    let scoreSaved = false; // 🆕 Skor kaydedildi mi?
+    let scoreSaved = false;
 
-    // 🆕 Seviyeye göre puan
+    // Seviyeye göre puan
     function getPointByLevel() {
         if (selectedLevel === 'Kolay') return 10;
         if (selectedLevel === 'Orta') return 25;
@@ -47,8 +55,25 @@ document.addEventListener('DOMContentLoaded', function () {
     nextBtn.disabled = true;
     questionText.textContent = "Sorular yükleniyor...";
 
+    // WebSocket bağlantısı
+    function connectWebSocket(username) {
+        const socket = new SockJS(WS_URL);
+        stompClient = Stomp.over(socket);
+        
+        stompClient.connect({}, function(frame) {
+            console.log('Quiz sayfası WebSocket bağlantısı kuruldu: ' + frame);
+            
+            stompClient.send("/app/user.online", {}, JSON.stringify({
+                username: username,
+                sessionId: sessionStorage.getItem('sessionId') || 'session_' + Date.now()
+            }));
+        }, function(error) {
+            console.error('WebSocket bağlantı hatası:', error);
+        });
+    }
+
     function loadQuestionsFromDatabase() {
-        fetch(`http://localhost:8080/api/questions?category=${encodeURIComponent(selectedCategory)}&level=${encodeURIComponent(selectedLevel)}`)
+        fetch(`${BASE_URL}/api/questions?category=${encodeURIComponent(selectedCategory)}&level=${encodeURIComponent(selectedLevel)}`)
             .then(function (response) {
                 if (!response.ok) {
                     throw new Error("Sorular getirilemedi");
@@ -137,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (index === q.correct) {
             button.classList.add("correct");
-            score += getPointByLevel(); // 🆕 Seviyeye göre puan
+            score += getPointByLevel();
             correctCount++;
         } else {
             button.classList.add("wrong");
@@ -168,10 +193,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function saveScoreToDatabase() {
-        if (scoreSaved) return; // 🆕 Zaten kaydedildiyse tekrar etme
+        if (scoreSaved) return;
         scoreSaved = true;
 
-        fetch('http://localhost:8080/api/score', {
+        fetch(BASE_URL + '/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -196,13 +221,12 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(function (error) {
             console.error("Skor kaydetme hatası:", error);
-            scoreSaved = false; // Hata olursa tekrar denenebilsin
+            scoreSaved = false;
         });
     }
 
     function showResultScreen() {
         clearInterval(timer);
-
         saveScoreToDatabase();
 
         progressFill.style.width = "100%";
@@ -236,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     backBtn.addEventListener("click", function () {
-        saveScoreToDatabase(); // 🆕 Çıkarken skoru kaydet
+        saveScoreToDatabase();
         window.location.href = "home.html";
     });
 

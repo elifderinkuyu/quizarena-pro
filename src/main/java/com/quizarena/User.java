@@ -1,4 +1,3 @@
-
 package com.quizarena;
 
 import jakarta.persistence.*;
@@ -16,6 +15,10 @@ public class User {
 
     @Column(nullable = false, length = 255)
     private String password;
+
+    // WebSocket için online durumu (veritabanına kaydedilmez)
+    @Transient
+    private boolean online;
 
     public User() {
     }
@@ -42,5 +45,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 }

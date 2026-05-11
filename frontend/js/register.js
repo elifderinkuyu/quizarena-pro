@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             registerBtn.classList.add('loading');
             registerBtn.textContent = '⏳ Kayıt yapılıyor...';
             
-            fetch('http://localhost:8080/api/register', {
+         fetch(`${BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('username').textContent = username;
 
     // Profil bilgilerini çek
-    fetch(`http://localhost:8080/api/profile/${username}`)
+    fetch(`${BASE_URL}/api/profile/${username}`)
         .then(function (response) {
             return response.json();
         })

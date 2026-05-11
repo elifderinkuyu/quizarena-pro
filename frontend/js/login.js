@@ -1,4 +1,7 @@
 // Login sayfası JavaScript işlemleri
+let stompClient = null;
+let currentUser = null;
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // ========== ELEMENTLERİ YAKALA ==========
@@ -47,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         loginBtn.classList.add('loading');
         loginBtn.textContent = '⏳ Giriş yapılıyor...';
 
-        fetch('http://localhost:8080/api/login', {
+        fetch(BASE_URL + '/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +68,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 loginBtn.textContent = 'GİRİŞ YAP';
 
                 if (data === 'Giriş başarılı') {
+                    currentUser = username;
                     localStorage.setItem('username', username);
+                    
+                    // WebSocket bağlantısını kur
+                    connectWebSocket(username);
+                    
+                    // Ana sayfaya yönlendir
                     window.location.href = 'home.html';
                 } else {
                     showError(usernameInput, '⚠️ Kullanıcı adı veya şifre hatalı!');
@@ -80,6 +89,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     });
 
+    // ========== WEBSOCKET BAĞLANTISI ==========
+    function connectWebSocket(username) {
+    const socket = new SockJS('http://localhost:8080/ws');
+    stompClient = Stomp.over(socket);
+    
+    stompClient.connect({}, function(frame) {
+        console.log('WebSocket bağlantısı kuruldu: ' + frame);
+        
+        stompClient.send("/app/user.online", {}, JSON.stringify({
+            username: username,
+            sessionId: sessionStorage.getItem('sessionId') || 'session_' + Date.now()
+        }));
+    }, function(error) {
+        console.error('WebSocket bağlantı hatası:', error);
+    });
+}
     // ========== YARDIMCI FONKSİYONLAR ==========
     function clearErrors() {
         usernameInput.classList.remove('error');

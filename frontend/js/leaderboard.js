@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const leaderboardList = document.getElementById('leaderboardList');
     const topUsername = document.getElementById('topUsername');
 
-    fetch('http://localhost:8080/api/leaderboard')
+    fetch(`${BASE_URL}/api/leaderboard`)
         .then(function (response) {
             return response.json();
         })

@@ -3,67 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuizArena Pro+ - Quiz</title>
-
-    <link rel="stylesheet" href="css/quiz.css">
+    <title>QuizArena Pro+ - VS Modu</title>
+    <link rel="stylesheet" href="css/vs.css">
 </head>
 <body>
 
     <div class="container">
-
-        <div class="quiz-card">
-
-            <div class="quiz-header">
+        <div class="vs-card">
+            
+            <div class="vs-header">
                 <button type="button" class="back-btn" id="backBtn">
                     ← Ana Sayfa
                 </button>
-
-                <h1>🎯 QuizArena Pro+</h1>
-
-                <div class="score-box">
-                    Puan: <span id="score">0</span>
-                </div>
+                <h1>⚔️ VS YARIŞMASI</h1>
             </div>
 
-            <div class="quiz-info">
-                <p>Kategori: <strong id="categoryName">Yükleniyor...</strong></p>
-                <p>Süre: <strong id="timer">15</strong> saniye</p>
+            <div class="scores-area">
+                <div class="score-card user-score">
+                    <div class="avatar">👤</div>
+                    <div class="username" id="userName">Sen</div>
+                    <div class="score" id="userScore">0</div>
+                </div>
+                
+                <div class="vs-divider">
+                    <span>VS</span>
+                </div>
+                
+                <div class="score-card opponent-score">
+                    <div class="avatar">🤖</div>
+                    <div class="username" id="opponentName">Rakip</div>
+                    <div class="score" id="opponentScore">0</div>
+                </div>
             </div>
 
             <div class="progress-area">
                 <div class="progress-text">
                     Soru <span id="currentQuestion">1</span> / <span id="totalQuestion">0</span>
                 </div>
-
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
 
             <div class="question-area">
-                <h2 id="questionText">Soru yükleniyor...</h2>
+                <h2 id="questionText">Rakip aranıyor...</h2>
             </div>
 
             <div class="answers-area" id="answersArea">
                 <!-- Cevaplar JavaScript ile gelecek -->
             </div>
 
-            <div class="quiz-actions">
+            <div class="vs-actions">
+                <div class="timer-display">⏱️ <span id="timer">15</span>s</div>
                 <button type="button" class="next-btn" id="nextBtn" disabled>
                     Sonraki Soru
                 </button>
             </div>
 
         </div>
-
     </div>
-    
+
     <!-- WebSocket kütüphaneleri -->
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     
     <script src="js/config.js"></script>
-    <script src="js/quiz.js"></script>
-
+    <script src="js/vs.js"></script>
 </body>
 </html>
