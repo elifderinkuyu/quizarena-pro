@@ -26,11 +26,8 @@ document.addEventListener('DOMContentLoaded', function () {
         connectWebSocket(username);
     }
 
-    let selectedCategory = localStorage.getItem('selectedCategory');
-    let selectedLevel = localStorage.getItem('selectedLevel');
-
-    if (!selectedCategory) selectedCategory = "Yazılım";
-    if (!selectedLevel) selectedLevel = "Kolay";
+    let selectedCategory = localStorage.getItem('selectedCategory') || "Yazılım";
+    let selectedLevel = localStorage.getItem('selectedLevel') || "Kolay";
 
     categoryName.textContent = selectedCategory + " (" + selectedLevel + ")";
 
@@ -133,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(function (data) {
+                scoreSaved = false;
+
                 questions = data.map(function (q) {
                     return {
                         question: q.questionText,
@@ -252,7 +251,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const q = questions[currentQuestionIndex];
         const buttons = document.querySelectorAll('.answer-btn');
 
-        buttons.forEach(btn => btn.disabled = true);
+        buttons.forEach(function (btn) {
+            btn.disabled = true;
+        });
 
         answeredCurrentQuestion = true;
 
@@ -290,11 +291,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function disableAnswers() {
         const buttons = document.querySelectorAll('.answer-btn');
-        buttons.forEach(btn => btn.disabled = true);
+
+        buttons.forEach(function (btn) {
+            btn.disabled = true;
+        });
     }
 
     function saveScoreToDatabase() {
         if (scoreSaved) return;
+
+        if (questions.length === 0) {
+            console.warn("Soru yok, skor kaydedilmedi.");
+            return;
+        }
+
         scoreSaved = true;
 
         fetch(BASE_URL + '/api/score', {
@@ -328,8 +338,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showResultScreen() {
         clearInterval(timer);
-        clearQuizState();
+
         saveScoreToDatabase();
+        clearQuizState();
 
         progressFill.style.width = "100%";
         questionText.textContent = "Quiz Tamamlandı 🎉";

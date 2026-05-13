@@ -27,19 +27,59 @@ let backBtnEl = null;
 let stompConnected = false;
 let pendingScore = null;
 let answeredCurrentQuestion = false;
-
+let scoreSaved = false;
 
 function safeTopicName(name) {
     return String(name).trim().replace(/\s+/g, "_");
 }
 
-
-function safeTopicName(name) {
-    return String(name).trim().replace(/\s+/g, "_");
+function getMatchSeedKey() {
+    const users = [currentUser, opponent].sort();
+    return users[0] + "_vs_" + users[1];
 }
 
 function getVsStateKey() {
-    return `vs_state_${currentUser}_${opponent}`;
+    return `vs_state_${getMatchSeedKey()}`;
+}
+
+function hashString(str) {
+    let hash = 1779033703 ^ str.length;
+
+    for (let i = 0; i < str.length; i++) {
+        hash = Math.imul(hash ^ str.charCodeAt(i), 3432918353);
+        hash = (hash << 13) | (hash >>> 19);
+    }
+
+    return function () {
+        hash = Math.imul(hash ^ (hash >>> 16), 2246822507);
+        hash = Math.imul(hash ^ (hash >>> 13), 3266489909);
+        return (hash ^= hash >>> 16) >>> 0;
+    };
+}
+
+function seededRandom(seed) {
+    return function () {
+        seed |= 0;
+        seed = seed + 0x6D2B79F5 | 0;
+
+        let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+}
+
+function shuffleQuestionsDeterministically(questionList) {
+    const seed = hashString(getMatchSeedKey())();
+    const random = seededRandom(seed);
+    const shuffled = [...questionList];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
 }
 
 function saveGameState() {
@@ -62,9 +102,6 @@ function loadGameState() {
 
     const saved = localStorage.getItem(getVsStateKey());
 
-    console.log("Yüklenecek VS state:", getVsStateKey());
-    console.log("VS localStorage içeriği:", saved);
-
     if (!saved) return false;
 
     try {
@@ -76,7 +113,7 @@ function loadGameState() {
         timeLeft = Number(state.timeLeft ?? 15);
         answeredCurrentQuestion = Boolean(state.answeredCurrentQuestion);
 
-        console.log("VS state başarıyla yüklendi:", state);
+        console.log("VS state yüklendi:", state);
         return true;
     } catch (error) {
         console.error("VS state yüklenemedi:", error);
@@ -99,11 +136,10 @@ function trySendPendingScore() {
 
     if (stompConnected && stompClient) {
         try {
-            console.log("Pending skor gönderiliyor:", pendingScore);
             stompClient.send("/app/match.score.update", {}, JSON.stringify(pendingScore));
             pendingScore = null;
         } catch (e) {
-            console.error("Skor gönderilemedi, yeniden deneniyor", e);
+            console.error("Skor gönderilemedi:", e);
         }
     } else {
         setTimeout(trySendPendingScore, 300);
@@ -116,7 +152,6 @@ function sendScoreReliable(data) {
         stompClient.send("/app/match.score.update", {}, JSON.stringify(data));
     } else {
         pendingScore = data;
-        console.log("Skor kuyruğa alındı. WebSocket hazır değil:", data);
         setTimeout(trySendPendingScore, 300);
     }
 }
@@ -133,9 +168,49 @@ function sendQuestionUpdateReliable() {
     if (stompConnected && stompClient) {
         console.log("Soru güncellemesi gönderiliyor:", data);
         stompClient.send("/app/match.question.update", {}, JSON.stringify(data));
-    } else {
-        console.warn("WebSocket hazır değil, soru güncellemesi gönderilemedi.");
     }
+}
+
+function saveVsScoreToDatabase() {
+    if (scoreSaved) return;
+
+    if (!currentUser || questions.length === 0) {
+        console.warn("VS skoru kaydedilmedi: kullanıcı veya soru yok.");
+        return;
+    }
+
+    scoreSaved = true;
+
+    const correctCount = Math.floor(score / 10);
+    const wrongCount = Math.max(questions.length - correctCount, 0);
+
+    fetch(BASE_URL + "/api/score", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            username: currentUser,
+            category: "VS Modu",
+            level: "Yarışma",
+            score: score,
+            correctCount: correctCount,
+            wrongCount: wrongCount
+        })
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("VS skoru kaydedilemedi");
+            }
+            return response.text();
+        })
+        .then(function (data) {
+            console.log("VS skoru başarıyla kaydedildi:", data);
+        })
+        .catch(function (error) {
+            console.error("VS skor kaydetme hatası:", error);
+            scoreSaved = false;
+        });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -168,6 +243,8 @@ document.addEventListener("DOMContentLoaded", function () {
     totalQuestionEl = document.getElementById("totalQuestion");
     backBtnEl = document.getElementById("backBtn");
 
+    scoreSaved = false;
+
     loadGameState();
 
     if (userNameEl) userNameEl.textContent = currentUser;
@@ -196,8 +273,6 @@ document.addEventListener("DOMContentLoaded", function () {
             saveGameState();
             sendQuestionUpdateReliable();
 
-            console.log("Yeni soru index kaydedildi ve rakibe gönderildi:", currentQuestionIndex);
-
             if (currentQuestionIndex < questions.length) {
                 loadQuestion();
             } else {
@@ -219,17 +294,14 @@ function connectWebSocket() {
         stompConnected = true;
         console.log("VS WebSocket bağlantısı kuruldu:", frame);
 
-       stompClient.subscribe(`/topic/score.update/${safeTopicName(currentUser)}`, function (scoreData) {
+        stompClient.subscribe(`/topic/score.update/${safeTopicName(currentUser)}`, function (scoreData) {
             const data = JSON.parse(scoreData.body);
             console.log("Skor güncellemesi alındı:", data);
 
             if (data.username && data.username !== currentUser) {
                 opponentScore = Number(data.score);
-
                 updateScoreUI();
                 saveGameState();
-
-                console.log("Rakip skoru ekrana yazıldı:", opponentScore);
             }
         });
 
@@ -238,17 +310,13 @@ function connectWebSocket() {
             console.log("Rakip soru güncellemesi gönderdi:", data);
 
             if (data.username && data.username !== currentUser) {
-                const newQuestionIndex = Number(data.currentQuestionIndex);
-
                 clearInterval(timer);
 
-                currentQuestionIndex = newQuestionIndex;
+                currentQuestionIndex = Number(data.currentQuestionIndex);
                 timeLeft = 15;
                 answeredCurrentQuestion = false;
 
                 saveGameState();
-
-                console.log("Rakip geçtiği için bu ekran da soruya geçiriliyor:", currentQuestionIndex);
 
                 if (questions.length > 0 && currentQuestionIndex < questions.length) {
                     loadQuestion();
@@ -267,28 +335,57 @@ function connectWebSocket() {
 }
 
 function loadQuestions() {
-    const selectedCategory = localStorage.getItem("selectedCategory") || "Yazılım";
-    const selectedLevel = localStorage.getItem("selectedLevel") || "Kolay";
+    const categories = [
+        "Yazılım",
+        "Genel Kültür",
+        "Spor",
+        "Bilim",
+        "Tarih",
+        "Matematik",
+        "Sanat",
+        "Teknoloji",
+        "Coğrafya"
+    ];
 
-    fetch(`${BASE_URL}/api/questions?category=${encodeURIComponent(selectedCategory)}&level=${encodeURIComponent(selectedLevel)}`)
-        .then(function (response) {
-            if (!response.ok) {
-                throw new Error("Sorular getirilemedi");
-            }
-            return response.json();
-        })
-        .then(function (data) {
-            questions = data.map(function (q) {
+    const levels = ["Kolay", "Orta", "Zor"];
+    const requests = [];
+
+    categories.forEach(function (category) {
+        levels.forEach(function (level) {
+            const url = `${BASE_URL}/api/questions?category=${encodeURIComponent(category)}&level=${encodeURIComponent(level)}`;
+
+            requests.push(
+                fetch(url)
+                    .then(function (response) {
+                        if (!response.ok) return [];
+                        return response.json();
+                    })
+                    .catch(function () {
+                        return [];
+                    })
+            );
+        });
+    });
+
+    Promise.all(requests)
+        .then(function (results) {
+            const allQuestions = results.flat();
+
+            questions = allQuestions.map(function (q) {
                 return {
                     question: q.questionText,
                     answers: [q.optionA, q.optionB, q.optionC, q.optionD],
-                    correct: q.correctOption
+                    correct: q.correctOption,
+                    category: q.category,
+                    level: q.level
                 };
             });
 
+            questions = shuffleQuestionsDeterministically(questions).slice(0, 10);
+
             if (questions.length === 0) {
                 if (questionTextEl) {
-                    questionTextEl.textContent = "Bu kategori ve seviyeye ait soru bulunamadı.";
+                    questionTextEl.textContent = "VS modu için soru bulunamadı.";
                 }
                 return;
             }
@@ -299,6 +396,7 @@ function loadQuestions() {
                 opponentScore = 0;
                 timeLeft = 15;
                 answeredCurrentQuestion = false;
+                scoreSaved = false;
                 clearGameState();
             }
 
@@ -308,7 +406,7 @@ function loadQuestions() {
             loadQuestion();
         })
         .catch(function (error) {
-            console.error("Soru çekme hatası:", error);
+            console.error("VS soru çekme hatası:", error);
 
             if (questionTextEl) {
                 questionTextEl.textContent = "Sorular yüklenirken hata oluştu.";
@@ -358,11 +456,19 @@ function loadQuestion() {
 
     const q = questions[currentQuestionIndex];
 
-    if (questionTextEl) questionTextEl.textContent = q.question;
-    if (currentQuestionEl) currentQuestionEl.textContent = currentQuestionIndex + 1;
+    if (questionTextEl) {
+        questionTextEl.textContent = q.question;
+    }
+
+    if (currentQuestionEl) {
+        currentQuestionEl.textContent = currentQuestionIndex + 1;
+    }
 
     const progressPercent = (currentQuestionIndex / questions.length) * 100;
-    if (progressFillEl) progressFillEl.style.width = progressPercent + "%";
+
+    if (progressFillEl) {
+        progressFillEl.style.width = progressPercent + "%";
+    }
 
     q.answers.forEach(function (answer, index) {
         const btn = document.createElement("button");
@@ -451,6 +557,7 @@ function disableAnswers() {
 function finishGame() {
     clearInterval(timer);
     clearGameState();
+    saveVsScoreToDatabase();
 
     let resultMessage = "";
 
