@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Kayıt Ol</title>
+    
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    
+    <div class="container">
+        
+        <div class="register-card">
+            
+            <h1>🎯 QuizArena Pro+</h1>
+            <p class="subtitle">Hemen kayıt ol, rekabete başla!</p>
+            
+            <form id="registerForm" novalidate>
+                
+                <!-- Kullanıcı adı -->
+                <div class="input-group">
+                    <label for="username">👤 Kullanıcı Adı</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="En az 3 karakter" 
+                        required
+                    >
+                </div>
+                
+                <!-- Şifre (Göster/Sakla butonlu) -->
+                <div class="input-group">
+                    <label for="password">🔒 Şifre</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="En az 4 karakter" 
+                            maxlength="20"
+                            required
+                        >
+                        <button type="button" id="togglePassword" class="toggle-password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Şifre Tekrar (Göster/Sakla butonlu) -->
+                <div class="input-group">
+                    <label for="confirmPassword">🔒 Şifre Tekrar</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            placeholder="Şifrenizi tekrar girin" 
+                            maxlength="20"
+                            required
+                        >
+                        <button type="button" id="toggleConfirm" class="toggle-password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Kayıt ol butonu -->
+                <button type="submit" class="register-btn">KAYIT OL</button>
+                
+                <p class="login-link">
+                    Zaten hesabın var mı? <a href="index.html">Giriş Yap</a>
+                </p>
+                
+            </form>
+            
+        </div>
+        
+    </div>
+   <script src="js/config.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

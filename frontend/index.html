@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Giriş Yap</title>
+    
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    
+    <div class="container">
+        
+        <div class="login-card">
+            
+            <h1>🎯 QuizArena Pro+</h1>
+            <p class="subtitle">Bilgini test et, rekabete katıl!</p>
+            
+            <form id="loginForm" novalidate>
+                
+                <!-- Kullanıcı adı alanı -->
+                <div class="input-group">
+                    <label for="username">👤 Kullanıcı Adı</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Kullanıcı adınızı girin" 
+                        required
+                    >
+                </div>
+                
+                <!-- Şifre alanı (Göster/Sakla butonlu) -->
+                <div class="input-group">
+                    <label for="password">🔒 Şifre</label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Şifrenizi girin" 
+                            maxlength="20"
+                            required
+                        >
+                        <button type="button" id="togglePassword" class="toggle-password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Giriş yap butonu -->
+                <button type="submit" class="login-btn">GİRİŞ YAP</button>
+                
+                <!-- Kayıt ol linki -->
+                <p class="register-link">
+                    Hesabın yok mu? <a href="register.html">Kayıt Ol</a>
+                </p>
+                
+            </form>
+            
+        </div>
+        
+    </div>
+    
+    <!-- WebSocket kütüphaneleri -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    
+    <script src="js/config.js"></script>
+    <script src="js/login.js"></script>
+    
+</body>
+</html>

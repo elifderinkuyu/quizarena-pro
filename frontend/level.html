@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zorluk Seçimi</title>
+
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="home-card">
+
+            <div class="section-title">
+                <h3 id="categoryTitle">Kategori</h3>
+                <p>Hangi zorluk seviyesinde quiz çözmek istiyorsun?</p>
+            </div>
+
+            <div class="level-grid">
+
+                <div class="category-card level-card" data-level="Kolay">
+                    <div class="category-icon">🟢</div>
+                    <h4>Kolay</h4>
+                    <p>Başlangıç seviyesi sorular.</p>
+                </div>
+
+                <div class="category-card level-card" data-level="Orta">
+                    <div class="category-icon">🟡</div>
+                    <h4>Orta</h4>
+                    <p>Orta seviye bilgi soruları.</p>
+                </div>
+
+                <div class="category-card level-card" data-level="Zor">
+                    <div class="category-icon">🔴</div>
+                    <h4>Zor</h4>
+                    <p>Daha zor ve seçici sorular.</p>
+                </div>
+
+            </div>
+
+            <div class="quick-actions level-actions">
+                <button type="button" class="secondary-btn" id="backBtn">
+                    ← Ana Sayfa
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/level.js"></script>
+
+</body>
+</html>

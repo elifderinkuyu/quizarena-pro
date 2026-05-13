@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizArena Pro+ - Ana Sayfa</title>
+
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="home-card">
+
+            <button type="button" class="logout-btn" id="logoutBtn">
+                Çıkış Yap
+            </button>
+
+            <div class="welcome-area">
+                <h2>🎯 QuizArena Pro+'ya Hoş Geldin!</h2>
+            </div>
+
+            <div class="profile-info-box">
+                <div class="profile-item">
+                    <span class="profile-label">👤 Kullanıcı</span>
+                    <strong id="profileUsername">Veritabanından gelecek</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">🏆 Toplam Puan</span>
+                    <strong id="profileScore">0</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">📚 Çözülen Quiz</span>
+                    <strong id="profileQuizCount">0</strong>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">📊 Sıralama</span>
+                    <strong id="profileRank">-</strong>
+                </div>
+
+                <div class="profile-item online-profile-item">
+                    <span class="profile-label">🟢 Çevrimiçi</span>
+                    <strong><span id="onlineCount">0</span> Kullanıcı</strong>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h3>📚 Kategoriler</h3>
+                <p>Bugün hangi kategoride kendini test etmek istersin? Bir kategori seçerek zorluk seviyesine geçebilirsin.</p>
+            </div>
+
+            <div class="category-slider-wrapper">
+                <button type="button" class="slider-btn left" id="categoryPrevBtn">
+                    ‹
+                </button>
+
+                <div class="category-slider" id="categorySlider">
+
+                    <div class="category-card" data-category="Yazılım">
+                        <div class="category-icon">💻</div>
+                        <h4>Yazılım</h4>
+                        <p>Programlama ve algoritma soruları.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Genel Kültür">
+                        <div class="category-icon">🌍</div>
+                        <h4>Genel Kültür</h4>
+                        <p>Tarih, coğrafya ve gündem.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Spor">
+                        <div class="category-icon">🏆</div>
+                        <h4>Spor</h4>
+                        <p>Spor bilgisi ve branşlar.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Bilim">
+                        <div class="category-icon">🔬</div>
+                        <h4>Bilim</h4>
+                        <p>Fizik, kimya, biyoloji.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Tarih">
+                        <div class="category-icon">📜</div>
+                        <h4>Tarih</h4>
+                        <p>Geçmişten günümüze olaylar.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Matematik">
+                        <div class="category-icon">➗</div>
+                        <h4>Matematik</h4>
+                        <p>Sayılar, problemler.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Sanat">
+                        <div class="category-icon">🎨</div>
+                        <h4>Sanat</h4>
+                        <p>Müzik, resim, sinema.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Teknoloji">
+                        <div class="category-icon">📱</div>
+                        <h4>Teknoloji</h4>
+                        <p>Yeni teknolojiler.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                    <div class="category-card" data-category="Coğrafya">
+                        <div class="category-icon">🗺️</div>
+                        <h4>Coğrafya</h4>
+                        <p>Dünya ve ülkeler.</p>
+                        <button class="start-btn">Quize Başla</button>
+                    </div>
+
+                </div>
+
+                <button type="button" class="slider-btn right" id="categoryNextBtn">
+                    ›
+                </button>
+            </div>
+            
+            <div class="quick-actions">
+                <button type="button" class="secondary-btn" id="profileBtn">
+                    👤 Profilim
+                </button>
+
+                <button type="button" class="secondary-btn" id="leaderboardBtn">
+                    🏅 Sıralama
+                </button>
+
+                <button type="button" class="secondary-btn" id="vsModeBtn">
+                    ⚔️ VS Modu (Yarışma)
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    
+    <script src="js/config.js"></script>
+    <script src="js/home.js"></script>
+
+</body>
+</html>
