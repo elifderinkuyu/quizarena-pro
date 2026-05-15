@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const backBtn = document.getElementById('backBtn');
     const username = localStorage.getItem('username');
@@ -10,19 +9,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('username').textContent = username;
 
-    // Profil bilgilerini çek
     fetch(`${BASE_URL}/api/profile/${username}`)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
-            document.getElementById('totalScore').textContent = data.totalScore || 0;
-            document.getElementById('quizCount').textContent = data.quizCount || 0;
+            const totalScore = Number(data.totalScore || 0);
+            const quizCount = Number(data.quizCount || 0);
+            const correctCount = Number(data.correctCount || 0);
+            const wrongCount = Number(data.wrongCount || 0);
+            const rank = Number(data.rank || 0);
+
+            document.getElementById('totalScore').textContent = totalScore;
+            document.getElementById('quizCount').textContent = quizCount;
             document.getElementById('bestCategory').textContent = data.bestCategory || '-';
-            document.getElementById('correctCount').textContent = data.correctCount || 0;
-            document.getElementById('wrongCount').textContent = data.wrongCount || 0;
-            // 🆕 Sıralama direkt profil verisinden geliyor
-            document.getElementById('rank').textContent = (data.rank > 0) ? data.rank : '-';
+            document.getElementById('correctCount').textContent = correctCount;
+            document.getElementById('wrongCount').textContent = wrongCount;
+            document.getElementById('rank').textContent = (rank > 0) ? rank : '-';
+
+            updateBadges(totalScore, quizCount, correctCount);
         })
         .catch(function (error) {
             console.error("Profil verisi alınamadı:", error);
@@ -32,3 +37,27 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = "home.html";
     });
 });
+
+function updateBadges(totalScore, quizCount, correctCount) {
+    const badgeCards = document.querySelectorAll('.badge-card');
+
+    badgeCards.forEach(function (badge) {
+        badge.classList.remove('active');
+    });
+
+    let activeBadgeIndex = 0;
+
+    if (totalScore >= 300 || quizCount >= 10 || correctCount >= 30) {
+        activeBadgeIndex = 3; // Seri Başarı
+    } else if (totalScore >= 200 || quizCount >= 6 || correctCount >= 20) {
+        activeBadgeIndex = 2; // Quiz Ustası
+    } else if (totalScore >= 100 || quizCount >= 3 || correctCount >= 10) {
+        activeBadgeIndex = 1; // Gelişen Oyuncu
+    } else {
+        activeBadgeIndex = 0; // Başlangıç
+    }
+
+    if (badgeCards[activeBadgeIndex]) {
+        badgeCards[activeBadgeIndex].classList.add('active');
+    }
+}
